@@ -1,0 +1,56 @@
+#!/usr/bin/env ruby
+require 'rubygems'
+require 'irb'
+require 'irb/completion'
+require 'track-r'
+include TrackR
+
+$token = Token.new :token => '96c425c730545ee008f08cb67d8f0de5'
+
+def t
+  @t ||= Tracker.new($token)
+end
+
+class Command
+  def initialize *commands
+    @commands = commands.map(&:strip).reject(&:empty?)
+  end
+
+  def projects
+    puts t.projects.map(&:name)
+  end
+
+  def stories
+    project unless @project
+    filter_field, filter_value = @commands.shift, @commands.shift
+
+    puts @project.stories.map{|story|
+      next if filter_field && filter_value && story.send(filter_field) !~ /#{filter_value}/
+      story.id + ": " + story.name
+    }.compact
+  end
+
+  def project
+    filter = @commands.shift
+    @project = t.projects.detect{|p|p.name =~ /#{filter}/}
+    puts @project.name
+    consume
+  end
+
+  def consume
+    if @commands.first && respond_to?(@commands.first)
+      send @commands.shift
+      return true
+    else
+      return false
+    end
+  end
+end
+
+if __FILE__ == $0
+  if ARGV.size == 0
+    IRB.start
+  else
+    Command.new(*ARGV).consume or eval(ARGV.join(" "))
+  end
+end
