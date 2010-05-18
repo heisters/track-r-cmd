@@ -10,7 +10,7 @@ Installing
 No fancy-pants gem packaging yet:
 
     git clone git://github.com/heisters/track-r-cmd.git
-    vi track-r-cmd/track-r-cmd # add your token on TOKEN
+    vi track-r-cmd/track-r-cmd # add your token on $token =
     cd <a directory that's in your $PATH>
     ln -s <the directory you cloned to>/track-r-cmd/track-r-cmd
 
