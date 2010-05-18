@@ -5,7 +5,7 @@ require 'irb/completion'
 require 'track-r'
 include TrackR
 
-$token = Token.new :token => '96c425c730545ee008f08cb67d8f0de5'
+$token = Token.new :token => 'put yours here'
 
 def t
   @t ||= Tracker.new($token)
